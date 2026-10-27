@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Juri - Lomba Poster Digital</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans p-4 sm:p-8">
+    <div class="max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-bold text-indigo-700 mb-1">Penilaian Lomba Poster Digital</h2>
+        <p class="text-sm text-slate-500 mb-6">SMP Wiyata Dharma Tahun Anggaran 2026</p>
+
+        <form id="formPenilaian" class="space-y-6">
+            <!-- Informasi Juri & Peserta (Opsi 2: Dropdown Juri Resmi) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Nama Dewan Juri</label>
+                    <select id="namaJuri" required class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="">-- Pilih Nama Juri --</option>
+                        <option value="Sony Yuda P, S.Pd.">Sony Yuda P, S.Pd.</option>
+                        <option value="Hariyanto, S.Pd., M.Pd.">Hariyanto, S.Pd., M.Pd.</option>
+                        <option value="Triwida Sukoco, S.Pd.">Triwida Sukoco, S.Pd.</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-1">Pilih Peserta</label>
+                    <select id="selectPeserta" required class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="">-- Memuat Data Peserta... --</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr class="border-slate-200">
+
+            <!-- Kriteria Penilaian dengan Indikator Rubrik -->
+            <div class="space-y-6">
+                <!-- 1. Kesesuaian Tema -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="font-bold text-slate-700">1. Kesesuaian Tema <span class="text-indigo-600 font-normal">(Bobot 25%)</span></label>
+                        <span id="label-tema" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">Menilai apakah isi poster sudah sesuai dengan tema dan tujuan lomba.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                        <button type="button" onclick="setNilai('tema', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Melenceng</button>
+                        <button type="button" onclick="setNilai('tema', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Kurang relevan</button>
+                        <button type="button" onclick="setNilai('tema', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Sesuai & relevan</button>
+                        <button type="button" onclick="setNilai('tema', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat mendalam</button>
+                    </div>
+                    <input type="number" id="input-tema" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('tema')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+                </div>
+
+                <!-- 2. Kreativitas & Orisinalitas -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="font-bold text-slate-700">2. Kreativitas & Orisinalitas <span class="text-indigo-600 font-normal">(Bobot 25%)</span></label>
+                        <span id="label-kreativitas" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">Ide menarik, unik, dan bukan sekadar meniru karya orang lain.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                        <button type="button" onclick="setNilai('kreativitas', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Plagiat</button>
+                        <button type="button" onclick="setNilai('kreativitas', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Minim kebaruan</button>
+                        <button type="button" onclick="setNilai('kreativitas', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Menarik & unik</button>
+                        <button type="button" onclick="setNilai('kreativitas', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat orisinal</button>
+                    </div>
+                    <input type="number" id="input-kreativitas" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('kreativitas')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+                </div>
+
+                <!-- 3. Desain & Komposisi -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="font-bold text-slate-700">3. Desain & Komposisi <span class="text-indigo-600 font-normal">(Bobot 20%)</span></label>
+                        <span id="label-desain" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">Tata letak (layout), keseimbangan, pemilihan warna, serta tipografi.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                        <button type="button" onclick="setNilai('desain', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Berantakan</button>
+                        <button type="button" onclick="setNilai('desain', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Kurang seimbang</button>
+                        <button type="button" onclick="setNilai('desain', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Rapi & harmonis</button>
+                        <button type="button" onclick="setNilai('desain', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Estetika tinggi</button>
+                    </div>
+                    <input type="number" id="input-desain" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('desain')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+                </div>
+
+                <!-- 4. Pesan & Keterbacaan -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="font-bold text-slate-700">4. Pesan & Keterbacaan <span class="text-indigo-600 font-normal">(Bobot 15%)</span></label>
+                        <span id="label-pesan" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">Pesan mudah dipahami, singkat, jelas, dan menarik bagi yang melihat.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                        <button type="button" onclick="setNilai('pesan', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Tidak jelas</button>
+                        <button type="button" onclick="setNilai('pesan', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Kurang komunikatif</button>
+                        <button type="button" onclick="setNilai('pesan', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Jelas & mudah</button>
+                        <button type="button" onclick="setNilai('pesan', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat kuat</button>
+                    </div>
+                    <input type="number" id="input-pesan" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('pesan')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+                </div>
+
+                <!-- 5. Teknik Digital -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="font-bold text-slate-700">5. Teknik Digital <span class="text-indigo-600 font-normal">(Bobot 15%)</span></label>
+                        <span id="label-teknik" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-3">Ketepatan penggunaan aplikasi desain (Canva), gambar, elemen, dan efek visual.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                        <button type="button" onclick="setNilai('teknik', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Kaku / asal</button>
+                        <button type="button" onclick="setNilai('teknik', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Standar</button>
+                        <button type="button" onclick="setNilai('teknik', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Tepat & rapi</button>
+                        <button type="button" onclick="setNilai('teknik', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat matang</button>
+                    </div>
+                    <input type="number" id="input-teknik" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('teknik')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
+                </div>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl transition shadow-md">Simpan Penilaian Peserta</button>
+        </form>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyNzipKxqGhlMcIMBvixyGnAmSJvOCAMiMx-y9KQviCtQDHjrtCdZTLT34QQ8eNAG1D/exec"; // Ganti dengan URL Web App Apps Script kamu
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetch(API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    const select = document.getElementById('selectPeserta');
+                    select.innerHTML = '<option value="">-- Pilih Peserta --</option>';
+                    data.forEach(p => {
+                        let opt = document.createElement('option');
+                        opt.value = p.nomor;
+                        opt.textContent = `${p.nomor} - ${p.nama}`;
+                        opt.dataset.nama = p.nama;
+                        select.appendChild(opt);
+                    });
+                })
+                .catch(err => {
+                    console.error("Gagal memuat peserta:", err);
+                    document.getElementById('selectPeserta').innerHTML = '<option value="">Gagal memuat data peserta</option>';
+                });
+        });
+
+        function setNilai(kategori, min, max) {
+            let midVal = Math.floor((min + max) / 2);
+            const input = document.getElementById(`input-${kategori}`);
+            input.value = midVal;
+            updateLabel(kategori);
+        }
+
+        function updateLabel(kategori) {
+            const val = document.getElementById(`input-${kategori}`).value;
+            document.getElementById(`label-${kategori}`).textContent = `Nilai: ${val || 0}`;
+        }
+
+        document.getElementById('formPenilaian').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.disabled = true;
+            btn.textContent = "Menyimpan nilai...";
+
+            const selectPeserta = document.getElementById('selectPeserta');
+            const selectedOpt = selectPeserta.options[selectPeserta.selectedIndex];
+
+            const payload = {
+                juri: document.getElementById('namaJuri').value,
+                nomorPeserta: selectPeserta.value,
+                namaPeserta: selectedOpt.dataset.nama || "",
+                tema: document.getElementById('input-tema').value,
+                kreativitas: document.getElementById('input-kreativitas').value,
+                desain: document.getElementById('input-desain').value,
+                pesan: document.getElementById('input-pesan').value,
+                teknik: document.getElementById('input-teknik').value
+            };
+
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(`Berhasil! Nilai Akhir peserta tercatat: ${data.nilaiAkhir.toFixed(2)}`);
+                document.getElementById('formPenilaian').reset();
+                ['tema', 'kreativitas', 'desain', 'pesan', 'teknik'].forEach(k => {
+                    document.getElementById(`label-${k}`).textContent = "Nilai: 0";
+                });
+                btn.disabled = false;
+                btn.textContent = "Simpan Penilaian Peserta";
+            })
+            .catch(err => {
+                alert("Terjadi kesalahan saat menyimpan data.");
+                console.error(err);
+                btn.disabled = false;
+                btn.textContent = "Simpan Penilaian Peserta";
+            });
+        });
+    </script>
+</body>
+</html>
