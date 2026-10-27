@@ -5,119 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Penilaian Juri - Lomba Poster Digital</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans p-4 sm:p-8">
-    <div class="max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200">
-        <h2 class="text-2xl font-bold text-indigo-700 mb-1">Penilaian Lomba Poster Digital</h2>
-        <p class="text-sm text-slate-500 mb-6">SMP Wiyata Dharma Tahun Anggaran 2026</p>
+<body class="bg-gradient-to-br from-rose-50 via-amber-50 to-indigo-50 min-h-screen text-slate-800 p-4 sm:p-8">
+    <div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-md p-6 sm:p-10 rounded-3xl shadow-xl border border-white">
+        
+        <!-- Header Judul Bertema Seni -->
+        <div class="text-center mb-8">
+            <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Dewan Juri Seni & Desain</span>
+            <h2 class="text-3xl font-extrabold text-slate-900 mt-2">Lomba Poster Digital</h2>
+            <p class="text-sm text-slate-500 mt-1">SMP Wiyata Dharma • Tahun Anggaran 2026</p>
+        </div>
 
-        <form id="formPenilaian" class="space-y-6">
-            <!-- Informasi Juri & Peserta (Opsi 2: Dropdown Juri Resmi) -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Nama Dewan Juri</label>
-                    <select id="namaJuri" required class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <option value="">-- Pilih Nama Juri --</option>
-                        <option value="Sony Yudha Pristiwanto, S.Pd.">Sony Yudha Pristiwanto, S.Pd.</option>
-                        <option value="Hariyanto, S.Pd., M.Pd.">Hariyanto, S.Pd., M.Pd.</option>
-                        <option value="Triwida Sukoco, S.Pd.">Triwida Sukoco, S.Pd.</option>
-                    </select>
+        <!-- Tab Navigasi Menu -->
+        <div class="flex justify-center mb-8 border-b border-slate-200">
+            <button onclick="switchTab('form')" id="tab-form" class="px-6 py-3 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 transition">Form Penilaian</button>
+            <button onclick="switchTab('rekap')" id="tab-rekap" class="px-6 py-3 font-semibold text-sm text-slate-400 hover:text-slate-600 transition">Rekap & 6 Besar Juara</button>
+        </div>
+
+        <!-- TAB 1: FORM PENILAIAN -->
+        <div id="section-form">
+            <form id="formPenilaian" class="space-y-6">
+                <!-- Informasi Juri & Peserta -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nama Dewan Juri</label>
+                        <select id="namaJuri" required class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="">-- Pilih Nama Juri --</option>
+                            <option value="Sony Yuda P, S.Pd.">Sony Yuda P, S.Pd.</option>
+                            <option value="Hariyanto, S.Pd., M.Pd.">Hariyanto, S.Pd., M.Pd.</option>
+                            <option value="Triwida Sukoco, S.Pd.">Triwida Sukoco, S.Pd.</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pilih Peserta</label>
+                        <select id="selectPeserta" required class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                            <option value="">-- Memuat Data Peserta... --</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-1">Pilih Peserta</label>
-                    <select id="selectPeserta" required class="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                        <option value="">-- Memuat Data Peserta... --</option>
-                    </select>
+
+                <!-- Kriteria Penilaian dengan Indikator Rubrik Seni -->
+                <div class="space-y-6">
+                    <!-- 1. Kesesuaian Tema -->
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="font-bold text-slate-700">1. Kesesuaian Tema <span class="text-indigo-600 text-xs font-semibold">(Bobot 25%)</span></label>
+                            <span id="label-tema" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Menilai apakah isi poster sudah sesuai dengan tema dan tujuan lomba.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <button type="button" onclick="setNilai('tema', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Melenceng</span></button>
+                            <button type="button" onclick="setNilai('tema', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Kurang relevan</span></button>
+                            <button type="button" onclick="setNilai('tema', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Sesuai & relevan</span></button>
+                            <button type="button" onclick="setNilai('tema', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Mendalam</span></button>
+                        </div>
+                        <input type="number" id="input-tema" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('tema')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
+                    </div>
+
+                    <!-- 2. Kreativitas & Orisinalitas -->
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="font-bold text-slate-700">2. Kreativitas & Orisinalitas <span class="text-indigo-600 text-xs font-semibold">(Bobot 25%)</span></label>
+                            <span id="label-kreativitas" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Ide menarik, unik, dan bukan sekadar meniru karya orang lain.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <button type="button" onclick="setNilai('kreativitas', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Plagiat</span></button>
+                            <button type="button" onclick="setNilai('kreativitas', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Minim kebaruan</span></button>
+                            <button type="button" onclick="setNilai('kreativitas', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Menarik & unik</span></button>
+                            <button type="button" onclick="setNilai('kreativitas', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Orisinal</span></button>
+                        </div>
+                        <input type="number" id="input-kreativitas" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('kreativitas')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
+                    </div>
+
+                    <!-- 3. Desain & Komposisi -->
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="font-bold text-slate-700">3. Desain & Komposisi <span class="text-indigo-600 text-xs font-semibold">(Bobot 20%)</span></label>
+                            <span id="label-desain" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Tata letak (layout), keseimbangan, pemilihan warna, serta tipografi.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <button type="button" onclick="setNilai('desain', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Berantakan</span></button>
+                            <button type="button" onclick="setNilai('desain', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Kurang seimbang</span></button>
+                            <button type="button" onclick="setNilai('desain', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Rapi & harmonis</span></button>
+                            <button type="button" onclick="setNilai('desain', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Estetis</span></button>
+                        </div>
+                        <input type="number" id="input-desain" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('desain')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
+                    </div>
+
+                    <!-- 4. Pesan & Keterbacaan -->
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="font-bold text-slate-700">4. Pesan & Keterbacaan <span class="text-indigo-600 text-xs font-semibold">(Bobot 15%)</span></label>
+                            <span id="label-pesan" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Pesan mudah dipahami, singkat, jelas, dan menarik bagi yang melihat.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <button type="button" onclick="setNilai('pesan', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Tidak jelas</span></button>
+                            <button type="button" onclick="setNilai('pesan', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Kurang komunikatif</span></button>
+                            <button type="button" onclick="setNilai('pesan', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Jelas & mudah</span></button>
+                            <button type="button" onclick="setNilai('pesan', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Sangat kuat</span></button>
+                        </div>
+                        <input type="number" id="input-pesan" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('pesan')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
+                    </div>
+
+                    <!-- 5. Teknik Digital -->
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="font-bold text-slate-700">5. Teknik Digital <span class="text-indigo-600 text-xs font-semibold">(Bobot 15%)</span></label>
+                            <span id="label-teknik" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-3">Ketepatan penggunaan aplikasi desain (Canva), gambar, elemen, dan efek visual.</p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                            <button type="button" onclick="setNilai('teknik', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Kaku / asal</span></button>
+                            <button type="button" onclick="setNilai('teknik', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Standar</span></button>
+                            <button type="button" onclick="setNilai('teknik', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Tepat & rapi</span></button>
+                            <button type="button" onclick="setNilai('teknik', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Matang</span></button>
+                        </div>
+                        <input type="number" id="input-teknik" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('teknik')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
+                    </div>
                 </div>
+
+                <button type="submit" id="btnSubmit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-4 rounded-2xl transition shadow-lg shadow-indigo-200">Simpan Penilaian Peserta</button>
+            </form>
+        </div>
+
+        <!-- TAB 2: REKAP & 6 BESAR JUARA -->
+        <div id="section-rekap" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">Daftar 6 Besar Kandidat Juara</h3>
+                    <p class="text-xs text-slate-400 mt-0.5">Akumulasi nilai akhir terbaik dari seluruh dewan juri.</p>
+                </div>
+                <button onclick="loadRekapData()" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 font-semibold px-4 py-2 rounded-xl text-xs transition">🔄 Muat Ulang Data</button>
             </div>
 
-            <hr class="border-slate-200">
-
-            <!-- Kriteria Penilaian dengan Indikator Rubrik -->
-            <div class="space-y-6">
-                <!-- 1. Kesesuaian Tema -->
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-700">1. Kesesuaian Tema <span class="text-indigo-600 font-normal">(Bobot 25%)</span></label>
-                        <span id="label-tema" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">Menilai apakah isi poster sudah sesuai dengan tema dan tujuan lomba.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
-                        <button type="button" onclick="setNilai('tema', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Melenceng</button>
-                        <button type="button" onclick="setNilai('tema', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Kurang relevan</button>
-                        <button type="button" onclick="setNilai('tema', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Sesuai & relevan</button>
-                        <button type="button" onclick="setNilai('tema', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat mendalam</button>
-                    </div>
-                    <input type="number" id="input-tema" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('tema')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
-                </div>
-
-                <!-- 2. Kreativitas & Orisinalitas -->
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-700">2. Kreativitas & Orisinalitas <span class="text-indigo-600 font-normal">(Bobot 25%)</span></label>
-                        <span id="label-kreativitas" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">Ide menarik, unik, dan bukan sekadar meniru karya orang lain.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
-                        <button type="button" onclick="setNilai('kreativitas', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Plagiat</button>
-                        <button type="button" onclick="setNilai('kreativitas', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Minim kebaruan</button>
-                        <button type="button" onclick="setNilai('kreativitas', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Menarik & unik</button>
-                        <button type="button" onclick="setNilai('kreativitas', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat orisinal</button>
-                    </div>
-                    <input type="number" id="input-kreativitas" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('kreativitas')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
-                </div>
-
-                <!-- 3. Desain & Komposisi -->
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-700">3. Desain & Komposisi <span class="text-indigo-600 font-normal">(Bobot 20%)</span></label>
-                        <span id="label-desain" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">Tata letak (layout), keseimbangan, pemilihan warna, serta tipografi.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
-                        <button type="button" onclick="setNilai('desain', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Berantakan</button>
-                        <button type="button" onclick="setNilai('desain', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Kurang seimbang</button>
-                        <button type="button" onclick="setNilai('desain', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Rapi & harmonis</button>
-                        <button type="button" onclick="setNilai('desain', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Estetika tinggi</button>
-                    </div>
-                    <input type="number" id="input-desain" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('desain')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
-                </div>
-
-                <!-- 4. Pesan & Keterbacaan -->
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-700">4. Pesan & Keterbacaan <span class="text-indigo-600 font-normal">(Bobot 15%)</span></label>
-                        <span id="label-pesan" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">Pesan mudah dipahami, singkat, jelas, dan menarik bagi yang melihat.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
-                        <button type="button" onclick="setNilai('pesan', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Tidak jelas</button>
-                        <button type="button" onclick="setNilai('pesan', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Kurang komunikatif</button>
-                        <button type="button" onclick="setNilai('pesan', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Jelas & mudah</button>
-                        <button type="button" onclick="setNilai('pesan', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat kuat</button>
-                    </div>
-                    <input type="number" id="input-pesan" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('pesan')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
-                </div>
-
-                <!-- 5. Teknik Digital -->
-                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
-                    <div class="flex justify-between items-center mb-2">
-                        <label class="font-bold text-slate-700">5. Teknik Digital <span class="text-indigo-600 font-normal">(Bobot 15%)</span></label>
-                        <span id="label-teknik" class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md">Nilai: 0</span>
-                    </div>
-                    <p class="text-xs text-slate-500 mb-3">Ketepatan penggunaan aplikasi desain (Canva), gambar, elemen, dan efek visual.</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
-                        <button type="button" onclick="setNilai('teknik', 60, 69)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Kurang (60-69)</b><br>Kaku / asal</button>
-                        <button type="button" onclick="setNilai('teknik', 70, 79)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Cukup (70-79)</b><br>Standar</button>
-                        <button type="button" onclick="setNilai('teknik', 80, 89)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Bagus (80-89)</b><br>Tepat & rapi</button>
-                        <button type="button" onclick="setNilai('teknik', 90, 100)" class="p-2 text-xs border rounded-lg bg-white hover:bg-slate-100 text-left"><b>Luar Biasa (90-100)</b><br>Sangat matang</button>
-                    </div>
-                    <input type="number" id="input-teknik" min="60" max="100" required placeholder="Nilai (60-100)" oninput="updateLabel('teknik')" class="w-full border border-slate-300 rounded-lg p-2 text-sm bg-white">
-                </div>
+            <div id="container-enam-besar" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="col-span-2 text-center py-12 text-slate-400">Memuat data rekapitulasi...</div>
             </div>
+        </div>
 
-            <button type="submit" id="btnSubmit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-xl transition shadow-md">Simpan Penilaian Peserta</button>
-        </form>
     </div>
 
     <script>
@@ -142,6 +174,26 @@
                     document.getElementById('selectPeserta').innerHTML = '<option value="">Gagal memuat data peserta</option>';
                 });
         });
+
+        function switchTab(tab) {
+            const formTab = document.getElementById('tab-form');
+            const rekapTab = document.getElementById('tab-rekap');
+            const formSec = document.getElementById('section-form');
+            const rekapSec = document.getElementById('section-rekap');
+
+            if(tab === 'form') {
+                formTab.className = "px-6 py-3 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 transition";
+                rekapTab.className = "px-6 py-3 font-semibold text-sm text-slate-400 hover:text-slate-600 transition";
+                formSec.classList.remove('hidden');
+                rekapSec.classList.add('hidden');
+            } else {
+                rekapTab.className = "px-6 py-3 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 transition";
+                formTab.className = "px-6 py-3 font-semibold text-sm text-slate-400 hover:text-slate-600 transition";
+                rekapSec.classList.remove('hidden');
+                formSec.classList.add('hidden');
+                loadRekapData();
+            }
+        }
 
         function setNilai(kategori, min, max) {
             let midVal = Math.floor((min + max) / 2);
@@ -196,6 +248,48 @@
                 btn.textContent = "Simpan Penilaian Peserta";
             });
         });
+
+        function loadRekapData() {
+            const container = document.getElementById('container-enam-besar');
+            container.innerHTML = '<div class="col-span-2 text-center py-12 text-slate-400">Memproses 6 Besar...</div>';
+
+            fetch(API_URL + "?action=rekap")
+                .then(res => res.json())
+                .then(data => {
+                    if(!data || data.length === 0) {
+                        container.innerHTML = '<div class="col-span-2 text-center py-12 text-slate-400">Belum ada data nilai yang masuk.</div>';
+                        return;
+                    }
+
+                    container.innerHTML = "";
+                    data.forEach((item, index) => {
+                        let rankBadge = index === 0 ? 'bg-amber-100 text-amber-700 border-amber-200' : (index === 1 ? 'bg-slate-100 text-slate-700 border-slate-200' : (index === 2 ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-indigo-50 text-indigo-600 border-indigo-100'));
+                        
+                        let card = `
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-2xl border flex items-center justify-center font-extrabold text-lg ${rankBadge}">
+                                        #${index + 1}
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">${item.namaPeserta}</h4>
+                                        <p class="text-xs text-slate-400">Nomor Peserta: ${item.nomorPeserta}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-xs text-slate-400 block">Nilai Akhir Rata-rata</span>
+                                    <span class="text-lg font-extrabold text-indigo-600">${item.rataRata.toFixed(2)}</span>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += card;
+                    });
+                })
+                .catch(err => {
+                    console.error(err);
+                    container.innerHTML = '<div class="col-span-2 text-center py-12 text-rose-500">Gagal memuat data rekap.</div>';
+                });
+        }
     </script>
 </body>
 </html>
