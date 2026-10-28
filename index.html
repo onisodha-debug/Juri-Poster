@@ -22,110 +22,120 @@
 
         <!-- Tab Navigasi Menu -->
         <div class="flex justify-center mb-8 border-b border-slate-200">
-            <button onclick="switchTab('form')" id="tab-form" class="px-6 py-3 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 transition">Form Penilaian</button>
-            <button onclick="switchTab('rekap')" id="tab-rekap" class="px-6 py-3 font-semibold text-sm text-slate-400 hover:text-slate-600 transition">Rekap & 6 Besar Juara</button>
+            <button onclick="switchTab('form')" id="tab-form" class="px-6 py-3 font-bold text-sm border-b-2 border-indigo-600 text-indigo-600 transition">Form Penilaian Juri</button>
+            <button onclick="switchTab('rekap')" id="tab-rekap" class="px-6 py-3 font-semibold text-sm text-slate-400 hover:text-slate-600 transition">Tab Rekap & 6 Besar Juara</button>
         </div>
 
-        <!-- TAB 1: FORM PENILAIAN -->
+        <!-- TAB 1: FORM PENILAIAN / LOGIN PIN -->
         <div id="section-form">
-            <form id="formPenilaian" class="space-y-6">
-                <!-- Informasi Juri & Peserta -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
+            <!-- Modal / Kotak Input PIN (Sebelum Terverifikasi) -->
+            <div id="box-pin" class="max-w-md mx-auto bg-indigo-50/60 p-8 rounded-3xl border border-indigo-100 text-center space-y-4">
+                <div class="w-12 h-12 bg-indigo-600 text-white rounded-2xl mx-auto flex items-center justify-center font-bold text-xl shadow-md">🔒</div>
+                <h3 class="text-lg font-bold text-slate-800">Autentikasi Dewan Juri</h3>
+                <p class="text-xs text-slate-500">Masukkan 4 digit PIN juri Anda untuk mulai melakukan penilaian.</p>
+                <form onsubmit="verifikasiPIN(event)" class="space-y-3">
+                    <input type="password" id="inputPin" maxlength="4" required placeholder="• • • •" class="w-full text-center tracking-widest text-2xl border border-slate-300 rounded-2xl p-3 bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-2xl transition shadow-md">Masuk Penilaian</button>
+                </form>
+            </div>
+
+            <!-- Form Penilaian (Muncul Setelah PIN Benar) -->
+            <form id="formPenilaian" class="space-y-6 hidden">
+                <!-- Info Juri Aktif (Terkunci Otomatis) -->
+                <div class="flex items-center justify-between bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100">
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nama Dewan Juri</label>
-                        <select id="namaJuri" required class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <option value="">-- Pilih Nama Juri --</option>
-                            <option value="Sony Yudha Pristiwanto, S.Pd.">Sony Yudha Pristiwanto, S.Pd.</option>
-                            <option value="Hariyanto, S.Pd., M.Pd.">Hariyanto, S.Pd., M.Pd.</option>
-                            <option value="Triwida Sukoco, S.Pd.">Triwida Sukoco, S.Pd.</option>
-                        </select>
+                        <span class="text-xs font-bold text-slate-400 uppercase block">Dewan Juri Aktif</span>
+                        <span id="displayNamaJuri" class="font-bold text-indigo-700 text-base"></span>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pilih Peserta</label>
-                        <select id="selectPeserta" required class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
-                            <option value="">-- Memuat Data Peserta... --</option>
-                        </select>
-                    </div>
+                    <button type="button" onclick="logoutJuri()" class="text-xs text-rose-500 hover:underline font-semibold">Ganti Juri / Keluar</button>
                 </div>
 
-                <!-- Kriteria Penilaian dengan Indikator Rubrik Seni -->
+                <!-- Pilih Peserta -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Pilih Peserta</label>
+                    <select id="selectPeserta" required class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <option value="">-- Memuat Data Peserta... --</option>
+                    </select>
+                </div>
+
+                <!-- Kriteria Penilaian dengan Rubrik -->
                 <div class="space-y-6">
                     <!-- 1. Kesesuaian Tema -->
-                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex justify-between items-center mb-2">
                             <label class="font-bold text-slate-700">1. Kesesuaian Tema <span class="text-indigo-600 text-xs font-semibold">(Bobot 25%)</span></label>
                             <span id="label-tema" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-3">Menilai apakah isi poster sudah sesuai dengan tema dan tujuan lomba.</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                            <button type="button" onclick="setNilai('tema', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Melenceng</span></button>
-                            <button type="button" onclick="setNilai('tema', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Kurang relevan</span></button>
-                            <button type="button" onclick="setNilai('tema', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Sesuai & relevan</span></button>
-                            <button type="button" onclick="setNilai('tema', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Mendalam</span></button>
+                            <button type="button" onclick="setNilai('tema', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b></button>
+                            <button type="button" onclick="setNilai('tema', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b></button>
+                            <button type="button" onclick="setNilai('tema', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b></button>
+                            <button type="button" onclick="setNilai('tema', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b></button>
                         </div>
                         <input type="number" id="input-tema" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('tema')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
                     </div>
 
                     <!-- 2. Kreativitas & Orisinalitas -->
-                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex justify-between items-center mb-2">
                             <label class="font-bold text-slate-700">2. Kreativitas & Orisinalitas <span class="text-indigo-600 text-xs font-semibold">(Bobot 25%)</span></label>
                             <span id="label-kreativitas" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-3">Ide menarik, unik, dan bukan sekadar meniru karya orang lain.</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                            <button type="button" onclick="setNilai('kreativitas', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Plagiat</span></button>
-                            <button type="button" onclick="setNilai('kreativitas', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Minim kebaruan</span></button>
-                            <button type="button" onclick="setNilai('kreativitas', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Menarik & unik</span></button>
-                            <button type="button" onclick="setNilai('kreativitas', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Orisinal</span></button>
+                            <button type="button" onclick="setNilai('kreativitas', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b></button>
+                            <button type="button" onclick="setNilai('kreativitas', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b></button>
+                            <button type="button" onclick="setNilai('kreativitas', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b></button>
+                            <button type="button" onclick="setNilai('kreativitas', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b></button>
                         </div>
                         <input type="number" id="input-kreativitas" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('kreativitas')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
                     </div>
 
                     <!-- 3. Desain & Komposisi -->
-                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex justify-between items-center mb-2">
                             <label class="font-bold text-slate-700">3. Desain & Komposisi <span class="text-indigo-600 text-xs font-semibold">(Bobot 20%)</span></label>
                             <span id="label-desain" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-3">Tata letak (layout), keseimbangan, pemilihan warna, serta tipografi.</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                            <button type="button" onclick="setNilai('desain', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Berantakan</span></button>
-                            <button type="button" onclick="setNilai('desain', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Kurang seimbang</span></button>
-                            <button type="button" onclick="setNilai('desain', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Rapi & harmonis</span></button>
-                            <button type="button" onclick="setNilai('desain', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Estetis</span></button>
+                            <button type="button" onclick="setNilai('desain', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b></button>
+                            <button type="button" onclick="setNilai('desain', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b></button>
+                            <button type="button" onclick="setNilai('desain', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b></button>
+                            <button type="button" onclick="setNilai('desain', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b></button>
                         </div>
                         <input type="number" id="input-desain" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('desain')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
                     </div>
 
                     <!-- 4. Pesan & Keterbacaan -->
-                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex justify-between items-center mb-2">
                             <label class="font-bold text-slate-700">4. Pesan & Keterbacaan <span class="text-indigo-600 text-xs font-semibold">(Bobot 15%)</span></label>
                             <span id="label-pesan" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-3">Pesan mudah dipahami, singkat, jelas, dan menarik bagi yang melihat.</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                            <button type="button" onclick="setNilai('pesan', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Tidak jelas</span></button>
-                            <button type="button" onclick="setNilai('pesan', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Kurang komunikatif</span></button>
-                            <button type="button" onclick="setNilai('pesan', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Jelas & mudah</span></button>
-                            <button type="button" onclick="setNilai('pesan', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Sangat kuat</span></button>
+                            <button type="button" onclick="setNilai('pesan', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b></button>
+                            <button type="button" onclick="setNilai('pesan', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b></button>
+                            <button type="button" onclick="setNilai('pesan', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b></button>
+                            <button type="button" onclick="setNilai('pesan', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b></button>
                         </div>
                         <input type="number" id="input-pesan" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('pesan')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
                     </div>
 
                     <!-- 5. Teknik Digital -->
-                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-indigo-200 transition">
+                    <div class="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
                         <div class="flex justify-between items-center mb-2">
                             <label class="font-bold text-slate-700">5. Teknik Digital <span class="text-indigo-600 text-xs font-semibold">(Bobot 15%)</span></label>
                             <span id="label-teknik" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">Nilai: 0</span>
                         </div>
                         <p class="text-xs text-slate-400 mb-3">Ketepatan penggunaan aplikasi desain (Canva), gambar, elemen, dan efek visual.</p>
                         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
-                            <button type="button" onclick="setNilai('teknik', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b><br><span class="text-slate-400">Kaku / asal</span></button>
-                            <button type="button" onclick="setNilai('teknik', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b><br><span class="text-slate-400">Standar</span></button>
-                            <button type="button" onclick="setNilai('teknik', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b><br><span class="text-slate-400">Tepat & rapi</span></button>
-                            <button type="button" onclick="setNilai('teknik', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b><br><span class="text-slate-400">Matang</span></button>
+                            <button type="button" onclick="setNilai('teknik', 60, 69)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Kurang (60-69)</b></button>
+                            <button type="button" onclick="setNilai('teknik', 70, 79)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Cukup (70-79)</b></button>
+                            <button type="button" onclick="setNilai('teknik', 80, 89)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Bagus (80-89)</b></button>
+                            <button type="button" onclick="setNilai('teknik', 90, 100)" class="p-2.5 text-xs border border-slate-200 rounded-xl bg-slate-50 hover:bg-indigo-50 text-left transition"><b>Luar Biasa (90-100)</b></button>
                         </div>
                         <input type="number" id="input-teknik" min="60" max="100" required placeholder="Atau ketik nilai (60-100)" oninput="updateLabel('teknik')" class="w-full border border-slate-300 rounded-xl p-3 text-sm bg-slate-50/50 outline-none">
                     </div>
@@ -154,8 +164,24 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyNzipKxqGhlMcIMBvixyGnAmSJvOCAMiMx-y9KQviCtQDHjrtCdZTLT34QQ8eNAG1D/exec"; // Ganti dengan URL Web App Apps Script kamu
+        
+        // Daftar mapping PIN Juri
+        const JURI_PIN_MAP = {
+            "1111": "Sony Yudha Pristiwanto, S.Pd.",
+            "2222": "Hariyanto, S.Pd., M.Pd.",
+            "3333": "Triwida Sukoco, S.Pd."
+        };
+
+        let activeJuriName = "";
 
         window.addEventListener('DOMContentLoaded', () => {
+            // Cek apakah juri sudah login sebelumnya di browser ini
+            const savedJuri = sessionStorage.getItem('activeJuri');
+            if(savedJuri) {
+                activeJuriName = savedJuri;
+                tampilkanFormPenilaian();
+            }
+
             fetch(API_URL)
                 .then(res => res.json())
                 .then(data => {
@@ -169,11 +195,36 @@
                         select.appendChild(opt);
                     });
                 })
-                .catch(err => {
-                    console.error("Gagal memuat peserta:", err);
-                    document.getElementById('selectPeserta').innerHTML = '<option value="">Gagal memuat data peserta</option>';
-                });
+                .catch(err => console.error("Gagal memuat peserta:", err));
         });
+
+        function verifikasiPIN(e) {
+            e.preventDefault();
+            const pin = document.getElementById('inputPin').value.trim();
+            if(JURI_PIN_MAP[pin]) {
+                activeJuriName = JURI_PIN_MAP[pin];
+                sessionStorage.setItem('activeJuri', activeJuriName);
+                tampilkanFormPenilaian();
+            } else {
+                alert("PIN Juri salah! Silakan periksa kembali PIN Anda.");
+                document.getElementById('inputPin').value = "";
+            }
+        }
+
+        function tampilkanFormPenilaian() {
+            document.getElementById('box-pin').classList.add('hidden');
+            document.getElementById('formPenilaian').classList.remove('hidden');
+            document.getElementById('displayNamaJuri').textContent = activeJuriName;
+        }
+
+        function logoutJuri() {
+            sessionStorage.removeItem('activeJuri');
+            activeJuriName = "";
+            document.getElementById('formPenilaian').reset();
+            document.getElementById('formPenilaian').classList.add('hidden');
+            document.getElementById('box-pin').classList.remove('hidden');
+            document.getElementById('inputPin').value = "";
+        }
 
         function switchTab(tab) {
             const formTab = document.getElementById('tab-form');
@@ -217,7 +268,7 @@
             const selectedOpt = selectPeserta.options[selectPeserta.selectedIndex];
 
             const payload = {
-                juri: document.getElementById('namaJuri').value,
+                juri: activeJuriName, // Otomatis menggunakan nama juri yang login
                 nomorPeserta: selectPeserta.value,
                 namaPeserta: selectedOpt.dataset.nama || "",
                 tema: document.getElementById('input-tema').value,
@@ -234,7 +285,13 @@
             .then(res => res.json())
             .then(data => {
                 alert(`Berhasil! Nilai Akhir peserta tercatat: ${data.nilaiAkhir.toFixed(2)}`);
-                document.getElementById('formPenilaian').reset();
+                // Reset form pilihan peserta dan nilai saja, nama juri tetap aman terkunci
+                selectPeserta.value = "";
+                document.getElementById('input-tema').value = "";
+                document.getElementById('input-kreativitas').value = "";
+                document.getElementById('input-desain').value = "";
+                document.getElementById('input-pesan').value = "";
+                document.getElementById('input-teknik').value = "";
                 ['tema', 'kreativitas', 'desain', 'pesan', 'teknik'].forEach(k => {
                     document.getElementById(`label-${k}`).textContent = "Nilai: 0";
                 });
